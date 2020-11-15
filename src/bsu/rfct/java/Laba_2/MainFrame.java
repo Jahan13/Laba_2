@@ -25,6 +25,7 @@ public class MainFrame extends JFrame {
     private JTextField textFieldX;
     private JTextField textFieldY;
     private JTextField textFieldZ;
+    private JTextField textFieldSum;
     // Текстовое поле для отображения результата,
 // как компонент, совместно используемый в различных методах
     private JTextField textFieldResult;
@@ -39,6 +40,7 @@ public class MainFrame extends JFrame {
     }
     // Формула No2 для рассчѐта
     public Double calculate2(Double x, Double y, Double z) {
+
         return (pow((1+(x*x)),1/y)/(exp(sin(z)+x)));
     }
     // Вспомогательный метод для добавления кнопок на панель
@@ -71,7 +73,7 @@ public class MainFrame extends JFrame {
         hboxFormulaType.add(Box.createHorizontalGlue());
         hboxFormulaType.setBorder(
                 BorderFactory.createLineBorder(Color.YELLOW));
-// Создать область с полями ввода для X и Y
+// Создать область с полями ввода для X, Y и Z
         JLabel labelForX = new JLabel("X:");
         textFieldX = new JTextField("0", 10);
         textFieldX.setMaximumSize(textFieldX.getPreferredSize());
@@ -102,6 +104,7 @@ public class MainFrame extends JFrame {
         textFieldResult = new JTextField("0", 10);
         textFieldResult.setMaximumSize(
                 textFieldResult.getPreferredSize());
+
         Box hboxResult = Box.createHorizontalBox();
         hboxResult.add(Box.createHorizontalGlue());
         hboxResult.add(labelForResult);
@@ -147,6 +150,49 @@ public class MainFrame extends JFrame {
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.setBorder(
                 BorderFactory.createLineBorder(Color.GREEN));
+
+        JLabel labelForSum = new JLabel("Sum:");
+        textFieldSum = new JTextField("0", 10);
+        textFieldSum.setMaximumSize(textFieldSum.getPreferredSize());
+
+        Box hboxSum = Box.createHorizontalBox();
+        hboxSum.add(Box.createHorizontalGlue());
+        hboxSum.add(labelForSum);
+        hboxSum.add(Box.createHorizontalStrut(10));
+        hboxSum.add(textFieldSum);
+        hboxSum.add(Box.createHorizontalGlue());
+        hboxResult.setBorder(BorderFactory.createLineBorder(Color.RED));
+
+        JButton buttonMplus = new JButton("M+");
+        buttonMplus.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                try {
+                    Double sum = Double.parseDouble(textFieldResult.getText());
+                    sum += Double.parseDouble(textFieldSum.getText());;
+                    textFieldSum.setText(sum.toString());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        JButton buttonMC = new JButton("MC");
+        buttonMC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                textFieldSum.setText("0.0");
+            }
+        });
+
+        Box hboxButton2 = Box.createHorizontalBox();
+        hboxButton2.add(Box.createHorizontalGlue());
+        hboxButton2.add(buttonMplus);
+        hboxButton2.add(Box.createHorizontalStrut(30));
+        hboxButton2.add(buttonMC);
+        hboxButton2.add(Box.createHorizontalGlue());
+        hboxButton2.setBorder(
+                BorderFactory.createLineBorder(Color.GREEN));
+
 // Связать области воедино в компоновке BoxLayout
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
@@ -154,6 +200,8 @@ public class MainFrame extends JFrame {
         contentBox.add(hboxVariables);
         contentBox.add(hboxResult);
         contentBox.add(hboxButtons);
+        contentBox.add(hboxSum);
+        contentBox.add(hboxButton2);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
